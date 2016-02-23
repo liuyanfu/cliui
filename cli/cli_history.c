@@ -1,3 +1,16 @@
+/*
+* Copyright (c) 2016
+* All rights reserved.
+*
+* 文件名称：cli_history.c
+* 文件标识：
+* 摘 要：cli历史命令上下翻滚功能
+*
+* 当前版本 0.1
+* 作 者：刘彦夫
+* 完成日期：2016年2月23日
+*
+*/
 #include <stdio.h>
 #include "cli_history.h"
 #define CMD_HISTORY_NUM 10
@@ -97,7 +110,7 @@ void insertCmdHistory(char cmd[][CMD_WORD_MAX], int wordNum)
     /*
       * 反转覆盖第一个，需要把第一个下标往下移动
       */
-    if (nextIndex == g_cmdLog.beginIndex)
+    if (!isSame && nextIndex == g_cmdLog.beginIndex)
     {
         ++g_cmdLog.beginIndex;
         g_cmdLog.beginIndex = (g_cmdLog.beginIndex) % CMD_HISTORY_NUM;
@@ -118,10 +131,10 @@ int getPrevCmd(char (** cmd)[CMD_WORD_MAX])
     }
     else
     {
-        unsigned int idx = g_cmdLog.curIndex;
+        unsigned int idx = g_cmdLog.curIndex % CMD_HISTORY_NUM;
         *cmd = g_cmdLog.log[idx];
-        g_cmdLog.curIndex = (--idx) % CMD_HISTORY_NUM;
-        return g_cmdLog.logCmdSize[g_cmdLog.curIndex];
+        g_cmdLog.curIndex = idx - 1;
+        return g_cmdLog.logCmdSize[idx];
     }
 }
 

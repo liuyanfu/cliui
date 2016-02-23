@@ -121,7 +121,7 @@ int completeWord(char cmd[][CMD_WORD_MAX], int wordNum)
             strncat(candidateWords, " ", 1);
             strncat(candidateWords, i->cmdWord, CMD_WORD_MAX);
         }
-        printf("\n%s\n", candidateWords);
+        printf("%s\n", candidateWords);
         return CMD_TAB_FAILED;
     }
 
@@ -133,8 +133,11 @@ int completeWord(char cmd[][CMD_WORD_MAX], int wordNum)
     lst = getBrotherList(cmd, wordNum);    
     if (NULL == lst)
     {
-        getCmdAllFirstItem(candidateWords, sizeof(candidateWords) - 1);
-        printf("\n%s\n", candidateWords);
+        /*
+            getCmdAllFirstItem(candidateWords, sizeof(candidateWords) - 1);
+            printf("\n%s\n", candidateWords);
+            */
+        printf("\nno match command.\n");
         return CMD_TAB_FAILED;
     }
     
@@ -150,7 +153,7 @@ int completeWord(char cmd[][CMD_WORD_MAX], int wordNum)
             {
                 break;
             }
-            strncat(candidateWords, " ", 1);
+            strncat(candidateWords, "\n", 1);
             strncat(candidateWords, i->cmdWord, CMD_WORD_MAX);
         }
     }
@@ -174,7 +177,7 @@ int completeWord(char cmd[][CMD_WORD_MAX], int wordNum)
     /*
       * 走到这里说明有多个候选，则将所有候选都显示给用户
       */
-    printf("\n%s\n", candidateWords);
+    printf("%s\n", candidateWords);
 
     return CMD_TAB_FAILED;
 }
@@ -187,6 +190,14 @@ void mapToCmdFunc(char cmd[][CMD_WORD_MAX], int wordNum)
     if ('\0' == cmd[0][0])
     {
         return;
+    }
+
+    /*
+      * 尾部未匹配到的空word要忽略
+      */
+    while (wordNum > 0 && '\0' == cmd[wordNum - 1][0])
+    {
+        wordNum--;
     }
 
     
@@ -208,7 +219,8 @@ void mapToCmdFunc(char cmd[][CMD_WORD_MAX], int wordNum)
             /*
                 * 未到达最后一有个item就不会处理函数指针，需要提示用户补全参数
                 */
-            completeWord(cmd, wordNum);
+            //completeWord(cmd, wordNum);
+            printf("command not found.\n");
         }
     }
     else
@@ -255,6 +267,14 @@ int getOneWord(char word[CMD_WORD_MAX])
     
         if (ch == ' ')
         {
+            /*
+                * 单词开头不可以是空格
+                */
+            if (0 == i)
+            {
+                continue;
+            }
+            
             putchar(ch);
             while ((ch = getchar()) != EOF)
             {               
@@ -279,7 +299,7 @@ int getOneWord(char word[CMD_WORD_MAX])
             }
             else /* 退到上一个word */
             {
-                printf("\b \b");
+                //printf("\b \b");
                 return CMD_BACK;
             }
             continue;
@@ -378,7 +398,11 @@ void processCli(const char *prompt)
             }            
             else if (CMD_BACK == ret)
             {
-                if (i > 0) i--;
+                if (i > 0)
+                {
+                    i--;
+                    printf("\b \b");
+                }
                 debugCmd("CMD_BACK",cmd, i);
                 continue;
             }
@@ -386,6 +410,10 @@ void processCli(const char *prompt)
             {
                 int j;
                 wordNum = getPrevCmd(&pcmd);
+                if (0 == wordNum)
+                {
+                    continue;
+                }
                 COPY_CMD(cmd, pcmd, wordNum);
                 i = wordNum - 1;
                 printf("\n%s", prompt);
@@ -405,6 +433,10 @@ void processCli(const char *prompt)
             {
                 int j;
                 wordNum = getNextCmd(&pcmd);
+                if (0 == wordNum)
+                {
+                    continue;
+                }
                 COPY_CMD(cmd, pcmd, wordNum);
                 i = wordNum - 1;  
                 printf("\n%s", prompt);                

@@ -6,7 +6,7 @@
 #extern "C" {
 #endif
 
-RBT_NODE_S* RBT_NewNode(key_t key, data_t data)
+RBT_NODE_S* RBT_NewNode(key_type key, data_t data)
 {
     RBT_NODE_S *pstNode = (RBT_NODE_S*)RBT_ALLOC(sizeof(RBT_NODE_S));
 
@@ -261,7 +261,7 @@ RBT_NODE_S* RBT_EraseRebalance(RBT_NODE_S *pstNode, RBT_NODE_S *pstParent, RBT_N
     return pstRoot;
 }
 
-RBT_NODE_S* RBT_SearchAux(key_t key, RBT_NODE_S* pstRoot, RBT_NODE_S** save, pfnDataCmp pfn)
+RBT_NODE_S* RBT_SearchAux(key_type key, RBT_NODE_S* pstRoot, RBT_NODE_S** save, pfnDataCmp pfn)
 {
     RBT_NODE_S *pstNode = pstRoot, *pstParent = NULL;
     int iRet = 0;
@@ -292,7 +292,7 @@ RBT_NODE_S* RBT_SearchAux(key_t key, RBT_NODE_S* pstRoot, RBT_NODE_S** save, pfn
     return NULL;
 }
 
-RBT_NODE_S* RBT_Insert(key_t key, data_t data, RBT_NODE_S* pstRoot, pfnDataCmp pfn)
+RBT_NODE_S* RBT_Insert(key_type key, data_t data, RBT_NODE_S* pstRoot, pfnDataCmp pfn)
 {
     RBT_NODE_S *pstParent = NULL;
     RBT_NODE_S *pstNode = NULL;
@@ -327,12 +327,12 @@ RBT_NODE_S* RBT_Insert(key_t key, data_t data, RBT_NODE_S* pstRoot, pfnDataCmp p
     return RBT_InsertRebalance(pstNode, pstRoot);
 }
 
-RBT_NODE_S* RBT_Search(key_t key, RBT_NODE_S* pstRoot, pfnDataCmp pfn)
+RBT_NODE_S* RBT_Search(key_type key, RBT_NODE_S* pstRoot, pfnDataCmp pfn)
 {
     return RBT_SearchAux(key, pstRoot, NULL, pfn);
 }
 
-RBT_NODE_S* RBT_Erase(key_t key, RBT_NODE_S *pstRoot, pfnDataCmp pfn)
+RBT_NODE_S* RBT_Erase(key_type key, RBT_NODE_S *pstRoot, pfnDataCmp pfn)
 {
     RBT_NODE_S *pstChild = NULL;
     RBT_NODE_S *pstParent = NULL;

@@ -9,7 +9,7 @@
 #define RBT_ALLOC malloc
 #define RBT_FREE free
 
-typedef void* key_t;
+typedef void* key_type;
 typedef void* data_t;
 
 typedef int (*pfnDataCmp)(void*,void*);
@@ -25,14 +25,14 @@ typedef struct tagRbtNode
     struct tagRbtNode *pstLeft;
     struct tagRbtNode *pstRight;
     struct tagRbtNode *pstParent;
-    key_t key;
+    key_type key;
     data_t data;
     COLOR_E enColor;
 } RBT_NODE_S;
 
-RBT_NODE_S* RBT_Insert(key_t key, data_t data, RBT_NODE_S* pstRoot, pfnDataCmp pfn);
-RBT_NODE_S* RBT_Search(key_t key, RBT_NODE_S* pstRoot, pfnDataCmp pfn);
-RBT_NODE_S* RBT_Erase(key_t key, RBT_NODE_S* pstRoot, pfnDataCmp pfn);
+RBT_NODE_S* RBT_Insert(key_type key, data_t data, RBT_NODE_S* pstRoot, pfnDataCmp pfn);
+RBT_NODE_S* RBT_Search(key_type key, RBT_NODE_S* pstRoot, pfnDataCmp pfn);
+RBT_NODE_S* RBT_Erase(key_type key, RBT_NODE_S* pstRoot, pfnDataCmp pfn);
 void RBT_WALK(RBT_NODE_S * pstRoot, void (*fn)(void *data));
 
 #ifdef __cplusplus

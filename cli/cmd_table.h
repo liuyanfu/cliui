@@ -2,7 +2,7 @@
 #ifndef CMD_TABLE_H
 #define CMD_TABLE_H
 
-#include "../util/list_inc.h"
+#include "list_inc.h"
 
 #ifdef __cplusplus
 #extern "C" {
